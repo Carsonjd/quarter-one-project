@@ -2,19 +2,35 @@ $('document').ready(function(){
 
   //Menu button functionality
   var menuOpen = false;
-  $('#menu').click(function(){
-    if(menuOpen = false){
+  $('#menu-main').click(function(){
+    if(menuOpen === false){
       menuOpen = true;
-      $('.drop-main').animate({
-        'top': '-10%'
+      $('#menu-main').text('hide');
+      $('.red-glow-circle').animate({
+        'opacity': '0.6'
       },300);
-    } else {
-      menuOpen = false;
+      $('body').css('background-blend-mode', 'color-dodge');
+      $('#map').animate({
+        'opacity':'0.4'
+      }, 300);
       $('.drop-main').animate({
         'top': '20%'
       },300);
+    } else {
+      menuOpen = false;
+      $('#menu-main').text('menu');
+      $('.red-glow-circle').animate({
+        'opacity': '0.35'
+      },300);
+      $('body').css('background-blend-mode', 'normal');
+      $('#map').animate({
+        'opacity':'1.0'
+      }, 300);
+      $('.drop-main').animate({
+        'top': '-70%'
+      },300);
     }
-  })
+  });
 
   // var requestUrl = ''
   //
@@ -44,7 +60,7 @@ $('document').ready(function(){
   center: [-77.034084, 38.909671],
   zoom: 5
   });
-  console.log(map);
+  console.log(map._interactive);
 
 
 
