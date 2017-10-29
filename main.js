@@ -93,10 +93,24 @@ $('document').ready(function(){
     homeHide();
   });
 
+
+
+// function filmObj (imdbID, Poster, Title, Year){
+//   this.id = imdbID;
+//   this.poster = Poster;
+//   this.title = Title;
+//   this.year = Year;
+// }
+// var film = new filmObj (imdbID, Poster, Title, Year);
+// movies.push(film)
+
   //Form data
-  var places = {
-    
-  }
+  // function placeProto (){
+  //
+  // }
+  // var places = {
+  //
+  // }
 
   // var requestUrl = ''
   //
@@ -126,10 +140,22 @@ $('document').ready(function(){
   center: [-105.2838747,40.0165447],
   zoom: 10
   });
+  map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true
+  }));
+  map.on('click', function(event){
+    JSON.stringify(event.lngLat);
+    var features = map.queryRenderedFeatures(event.point);
+    console.log(JSON.stringify(features[0].geometry.coordinates));
+    console.log(JSON.stringify(features[0].properties.name));
+  })
 
 
 
-  console.log(map);
+  //console.log(map);
 
 
 

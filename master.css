@@ -11,7 +11,7 @@ body {
 .red-glow-circle {
   line-height: 40px;
   width: 200px;
-  opacity: 0.2;
+  opacity: 0.4;
   font-family: 'Megrim', cursive;
   color: #889491;
   text-shadow: 1px 3px 80px #fd0505;
@@ -42,25 +42,25 @@ body {
   grid-template-rows: repeat(4,100px);
 }
 
-#menu-home {
+#menu-map {
   grid-column: 1/4;
   grid-row: 1;
   border-radius: 50%;
 }
 
-#menu-map {
+#menu-locations {
   grid-column: 2/6;
   grid-row: 2;
   border-radius: 50%;
 }
 
-#menu-locations {
+#menu-add {
   grid-column: 3/8;
   grid-row: 3;
   border-radius: 50%;
 }
 
-#menu-contact {
+#menu-home {
   grid-column: 4/10;
   grid-row: 4;
   border-radius: 50%;
