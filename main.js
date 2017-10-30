@@ -151,7 +151,6 @@ $('document').ready(function(){
     locationListHide();
   });
 
-  var addingLoc = false;
   $('#your-location').click(function(event){
     $('.mapboxgl-ctrl-icon.mapboxgl-ctrl-geolocate').trigger('click');
     formHide();
@@ -164,7 +163,6 @@ $('document').ready(function(){
 	    lng = position.coords["longitude"];
       featureBlank.geometry.coordinates.push(lng);
       featureBlank.geometry.coordinates.push(lat);
-      console.log(position);
 	    },
 	      function(error) {
 	        console.log("Error: ", error);
@@ -174,27 +172,24 @@ $('document').ready(function(){
      });
     var nameField = $('<input>').attr({'type':'text', 'placeholder':'Location Name','id':'nameinput' }).addClass('location-input-item');
     var descField = $('<input>').attr({'type':'text', 'placeholder':'Add A Description','id':'descriptionField' }).addClass('location-input-item');
-    var submit = $('<div>').addClass('location-submit').text('Add');
+    var submit = $('<div>').attr('id', 'location-submit').text('Add');
     $('#location-input').append(nameField)
       .append(descField)
       .append(submit);
     $('#location-input').css('display', 'flex');
-    addingLoc = true;
   });
 
-  $('.location-submit').click(function(){
+  $('#location-input').on('click','#location-submit',function(){
     var props = featureBlank.properties
-    if(addingLoc === true){
       props.city = $('#nameinput').val();
       props.address = $('#descriptionField').val();
-      places.features.push(featureBlank);
+      places.features.unshift(featureBlank);
       console.log(featureBlank);
-      featureBlankReset();
+      //featureBlankReset();
       $('#location-input').empty();
       $('#location-input').css('display', 'none');
       mapShow();
-      addingLoc = false;
-    }
+      buildLocationList(places);
   });
 
   function featureBlankReset(){
@@ -736,7 +731,7 @@ places.features.forEach(function(marker){
     if (activeItem[0]) {
       activeItem[0].classList.remove('active');
     }
-    var location = document.getElementById('#location-' + places.features.indexOf(marker));
+    var location = document.getElementById('location-' + places.features.indexOf(marker));
     location.classList.add('active');
   });
 });
