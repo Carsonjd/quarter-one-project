@@ -107,3 +107,30 @@ h1 {
   box-shadow: 0px 0px 40px 30px #202020;
   opacity: 0.6;
 }
+
+.locations {
+  position: absolute;
+  top: 100%;
+  margin: 20px;
+  overflow: scroll;
+  height: 500px;
+  z-index: -1;
+  font-size: 24px;
+  font-family: 'Advent Pro', sans-serif;
+  display: block;
+  /* background-color: #202020; */
+  color: #FFFFFF;
+  -webkit-box-shadow: 0px 0px 40px 30px #202020;
+  -moz-box-shadow: 0px 0px 40px 30px #202020;
+  box-shadow: 0px 0px 25px 14px #202020;
+  opacity: 0.9;
+}
+
+.locations .item {
+  color: #FFFFFF;
+  display: block;
+  border-bottom: 1px solid #640808;
+  padding: 10px;
+  text-decoration: none;
+  background-color: #202020;
+}
