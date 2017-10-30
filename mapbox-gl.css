@@ -55,15 +55,17 @@
     background: #fff;
 }
 .mapboxgl-ctrl-group > button {
+  position: absolute;
+    top: 40px;
+    left: -30px;
     width: 30px;
     height: 30px;
     display: block;
     padding: 0;
     outline: none;
     border: none;
-    border-bottom: 1px solid #ddd;
     box-sizing: border-box;
-    background-color: rgba(0,0,0,0);
+    background-color: #000000;
     cursor: pointer;
 }
 /* https://bugzilla.mozilla.org/show_bug.cgi?id=140562 */
@@ -154,6 +156,7 @@
 }
 
 a.mapboxgl-ctrl-logo {
+    opacity: 0.2;
     width: 85px;
     height: 21px;
     margin: 0 0 -3px -3px;
@@ -182,6 +185,7 @@ a.mapboxgl-ctrl-logo {
     visibility: visible;
 }
 .mapboxgl-ctrl-attrib.mapboxgl-compact:after {
+    opacity: 0.3;
     content: '';
     cursor: pointer;
     position: absolute;
@@ -307,6 +311,7 @@ a.mapboxgl-ctrl-logo {
     border-left-color: #fff;
 }
 .mapboxgl-popup-close-button {
+  color: #ffffff;
     position: absolute;
     right: 0;
     top: 0;
@@ -320,10 +325,6 @@ a.mapboxgl-ctrl-logo {
 }
 .mapboxgl-popup-content {
     position: relative;
-    background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-    padding: 10px 10px 15px;
     pointer-events: auto;
 }
 .mapboxgl-popup-anchor-top-left .mapboxgl-popup-content {
@@ -347,17 +348,17 @@ a.mapboxgl-ctrl-logo {
 }
 
 .mapboxgl-user-location-dot {
-    background-color: #1DA1F2;
+    background-color: #6DC245;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    box-shadow: 0 0 2px rgba(0,0,0,0.25);
-    border: 2px solid #fff;
+    box-shadow: 0 0 2px red;
+    border: 2px solid #909090;
 }
 .mapboxgl-user-location-dot:after {
     content: '';
     display: block;
-    box-shadow: #1DA1F2 0 0 0 2px;
+    box-shadow: #red 0 0 0 2px;
     width: 16px;
     height: 16px;
     border-radius: 50%;

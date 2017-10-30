@@ -12,16 +12,19 @@ $('document').ready(function(){
     },300);
     $('body').css('background-blend-mode', 'color-dodge');
     $('#map').animate({
-      'opacity':'0.4'
+      'opacity':'0.2'
     }, 300);
     $('h1').animate({
-      'margin-top': '32%'
+      'margin-top': '9%'
     }, 300);
     $('.drop-main').animate({
-      'top': '20%'
+      'top': '4%'
     },300);
     $('.about').css('opacity', '0.1');
     $('.locations').css('opacity', '0.1');
+    $('.form-container').animate({
+      'opacity': '0.1'
+    },300);
   };
 
   function menuHide (){
@@ -42,6 +45,9 @@ $('document').ready(function(){
     }, 300);
     $('.about').css('opacity', '0.6');
     $('.locations').css('opacity', '0.9');
+    $('.form-container').animate({
+      'opacity': '0.9'
+    },300);
   };
 
   function homeShow (){
@@ -72,13 +78,21 @@ $('document').ready(function(){
     $('#map').css('display', 'none');
   }
 
-  // function formShow (){
-  //
-  // }
+  function formShow (){
+    $('.form-container').animate({
+      'top': '30%'
+    },300);
+  }
+
+  function formHide (){
+    $('.form-container').animate({
+      'top': '100%'
+    },300);
+  }
 
   function locationListShow (){
     $('.locations').animate({
-      'top':'0%'
+      'top':'2%'
     },300);
   };
 
@@ -97,12 +111,12 @@ $('document').ready(function(){
     }
   });
 
-  //Menu functionality
   $('#menu-home').click(function(event){
     homeShow();
     mapHide();
     menuHide();
     locationListHide();
+    formHide();
   });
 
   $('#menu-map').click(function(event){
@@ -110,6 +124,7 @@ $('document').ready(function(){
     mapShow();
     homeHide();
     locationListHide();
+    formHide();
   });
 
   $('#menu-locations').click(function(event){
@@ -118,6 +133,7 @@ $('document').ready(function(){
     }, 300);
     menuHide();
     homeHide();
+    formHide();
     locationListShow();
   });
 
@@ -125,6 +141,83 @@ $('document').ready(function(){
     locationListHide();
     mapShow();
   })
+
+  $('#menu-add').click(function(){
+    $('#map').animate({
+      'opacity':'0.4'
+    }, 300);
+    formShow();
+    menuHide();
+    locationListHide();
+  });
+
+  var addingLoc = false;
+  $('#your-location').click(function(event){
+    $('.mapboxgl-ctrl-icon.mapboxgl-ctrl-geolocate').trigger('click');
+    formHide();
+    navigator.geolocation.getCurrentPosition(function(position){
+	    var locationMarker = null;
+	      if (locationMarker){
+	         return;
+	        }
+	    lat = position.coords["latitude"];
+	    lng = position.coords["longitude"];
+      featureBlank.geometry.coordinates.push(lng);
+      featureBlank.geometry.coordinates.push(lat);
+      console.log(position);
+	    },
+	      function(error) {
+	        console.log("Error: ", error);
+	      },
+	    {
+       enableHighAccuracy: true
+     });
+    var nameField = $('<input>').attr({'type':'text', 'placeholder':'Location Name','id':'nameinput' }).addClass('location-input-item');
+    var descField = $('<input>').attr({'type':'text', 'placeholder':'Add A Description','id':'descriptionField' }).addClass('location-input-item');
+    var submit = $('<div>').addClass('location-submit').text('Add');
+    $('#location-input').append(nameField)
+      .append(descField)
+      .append(submit);
+    $('#location-input').css('display', 'flex');
+    addingLoc = true;
+  });
+
+  $('.location-submit').click(function(){
+    var props = featureBlank.properties
+    if(addingLoc === true){
+      props.city = $('#nameinput').val();
+      props.address = $('#descriptionField').val();
+      places.features.push(featureBlank);
+      console.log(featureBlank);
+      featureBlankReset();
+      $('#location-input').empty();
+      $('#location-input').css('display', 'none');
+      mapShow();
+      addingLoc = false;
+    }
+  });
+
+  function featureBlankReset(){
+    featureBlank.geometry.coordinates = [];
+    var props = featureBlank.properties;
+    props.address = "";
+    props.city = "";
+    props.country = "";
+
+  }
+
+  var featureBlank = {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      },
+      "properties": {
+        "address": "",
+        "city": "",
+        "country": "",
+      }
+    }
 
 
   var places = {
@@ -564,17 +657,17 @@ $('document').ready(function(){
     },
     trackUserLocation: true
   }));
+
+
   map.on('click', function(event){
     JSON.stringify(event.lngLat);
     var features = map.queryRenderedFeatures(event.point);
-    console.log(JSON.stringify(features[0].geometry.coordinates));
-    console.log(JSON.stringify(features[0].properties.name));
   })
 
   function flyToLocation(item) {
     map.flyTo({
       center: item.geometry.coordinates,
-      zoom: 5
+      zoom: 10
     });
   }
 
@@ -583,7 +676,7 @@ $('document').ready(function(){
     if (popUps[0]) popUps[0].remove();
     var popup = new mapboxgl.Popup({ closeOnClick: false })
       .setLngLat(item.geometry.coordinates)
-      .setHTML('<h5>Location</h5>' +
+      .setHTML('<h5>'+item.properties.city+'</h5>' +
         '<h4>' + item.properties.address + '</h4>')
       .addTo(map);
   }
@@ -631,7 +724,7 @@ places.features.forEach(function(marker){
   var element = document.createElement('div');
   element.classList = 'marker';
   new mapboxgl.Marker(element, {
-      offset: [-30, -40]
+      // offset: [-30, -40]
     })
     .setLngLat(marker.geometry.coordinates)
     .addTo(map);
@@ -643,7 +736,7 @@ places.features.forEach(function(marker){
     if (activeItem[0]) {
       activeItem[0].classList.remove('active');
     }
-    var location = $('#location-' + places.features.indexOf(marker));
+    var location = document.getElementById('#location-' + places.features.indexOf(marker));
     location.classList.add('active');
   });
 });
