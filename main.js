@@ -15,10 +15,12 @@ $('document').ready(function(){
       }
     };
 
-  var places = JSON.parse(localStorage.getItem('places')) || {
-    'type':'FeatureCollection',
-    'features':[]
-  };
+  var places =
+    JSON.parse(localStorage.getItem('places')) ||
+    {
+      'type':'FeatureCollection',
+      'features':[]
+    };
 
   // var places = {
   //         "type": "FeatureCollection",
@@ -612,20 +614,21 @@ $('document').ready(function(){
   });
 
   $('#location-input').on('click','#location-submit',function(){
-    var props = featureBlank.properties
+    var props = featureBlank.properties;
       props.city = $('#nameinput').val();
       props.address = $('#description-field').val();
       places.features.unshift(featureBlank);
+      localStorage.setItem('places', JSON.stringify(places));
       $('#location-input').empty();
       $('#location-input').css('display', 'none');
       mapShow();
       buildLocationList(places);
       createMarkers();
       createPopUp(places.features[0]);
-      localStorage.setItem('places', JSON.stringify(places));
   });
 
   $('#by-address').click(function(){
+    adding = true
     removePopUps();
     $('.mapboxgl-ctrl-geocoder').css('display', 'flex');
     formHide();
@@ -634,7 +637,11 @@ $('document').ready(function(){
        'opacity': '0.8'
     },300);
   });
+
+var adding = false;
+
   geocoder.on('result', function(event) {
+    if(adding === true){
     featureBlankReset(featureBlank);
     $('.mapboxgl-ctrl-geocoder').css('display','none');
     var props = featureBlank.properties;
@@ -642,12 +649,14 @@ $('document').ready(function(){
       props.address = event.result.place_name;
       featureBlank.geometry.coordinates = event.result.geometry.coordinates;
       places.features.unshift(featureBlank);
+      localStorage.setItem('places', JSON.stringify(places));
       mapShow();
       buildLocationList(places);
       createMarkers();
       createPopUp(places.features[0]);
-      localStorage.setItem('places', JSON.stringify(places));
-    });
+      adding = false
+    }
+  });
 
   function featureBlankReset(obj){
     obj.geometry.coordinates = [];
@@ -679,8 +688,9 @@ $('document').ready(function(){
       .addTo(map);
   };
 
-  function buildLocationList(data) {
-    for (i = 0; i < data.features.length; i++) {
+  function buildLocationList(data){
+    $('#locations').empty();
+    for (let i=0; i<data.features.length; i++) {
       var currentFeature = data.features[i];
       var prop = currentFeature.properties;
       var locations = document.getElementById('locations');
@@ -697,7 +707,7 @@ $('document').ready(function(){
       link.dataPosition = i;
       link.innerHTML = prop.address;
 
-      link.addEventListener('click', function(e) {
+      link.addEventListener('click', function(event) {
         var clickedLocation =   places.features[this.dataPosition];
         flyToLocation(clickedLocation);
         createPopUp(clickedLocation);
@@ -715,7 +725,6 @@ $('document').ready(function(){
     type: 'geojson',
     data: places
   });
-  buildLocationList(places);
   createMarkers();
   });
 
@@ -741,3 +750,5 @@ function createMarkers(){
     });
   });
 };
+buildLocationList(places);
+console.log(places);
