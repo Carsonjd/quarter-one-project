@@ -572,6 +572,7 @@ $('document').ready(function(){
   });
 
   $('#locations').click(function(event){
+    removePopUps();
     locationListHide();
     mapShow();
   });
