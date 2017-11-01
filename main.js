@@ -428,10 +428,12 @@ $('document').ready(function(){
 
   map.addControl(geocoder);
 
-  var menuOpen = false;
-  var homeOpen = false;
-  var mapOpen = true;
+  function removePopUps(){
+    var popUps = document.getElementsByClassName('mapboxgl-popup');
+    if (popUps[0]) popUps[0].remove();
+  };
 
+  var menuOpen = false;
   function menuView (){
     menuOpen = true;
     $('#menu-main').text('hide');
@@ -475,7 +477,6 @@ $('document').ready(function(){
   };
 
   function homeShow (){
-    homeOpen = true;
     $('body').css('background-image','url(DSC00858skiny.jpg)');
     $('.about').animate({
       'opacity': '0.6'
@@ -483,13 +484,11 @@ $('document').ready(function(){
   };
 
   function homeHide (){
-    homeOpen = false;
     $('body').css('background-image','url()');
     $('.about').fadeOut(300);
   };
 
   function mapShow (){
-    mapOpen = true;
     $('#map').css('display', 'block');
     $('body').css('background-image', 'url()');
     $('#map').animate({
@@ -498,7 +497,6 @@ $('document').ready(function(){
   };
 
   function mapHide (){
-    mapOpen = false;
     $('#map').css('display', 'none');
   };
 
@@ -539,7 +537,7 @@ $('document').ready(function(){
   };
 
   //Menu click/tap events
-  $('#menu-main').click(function(){
+  $('#menu-main').click(function(event){
     if(menuOpen === false){
       menuView();
     } else {
@@ -571,12 +569,12 @@ $('document').ready(function(){
     locationListShow();
   });
 
-  $('#locations').click(function(){
+  $('#locations').click(function(event){
     locationListHide();
     mapShow();
   });
 
-  $('#menu-add').click(function(){
+  $('#menu-add').click(function(event){
     homeHide();
     formShow();
     menuHide();
@@ -628,12 +626,13 @@ $('document').ready(function(){
   });
 
   $('#by-address').click(function(){
-     $('.mapboxgl-ctrl-geocoder').css('display', 'flex');
-     formHide();
-     mapBright();
-     $('.mapboxgl-ctrl-geocoder').animate({
+    removePopUps();
+    $('.mapboxgl-ctrl-geocoder').css('display', 'flex');
+    formHide();
+    mapBright();
+    $('.mapboxgl-ctrl-geocoder').animate({
        'opacity': '0.8'
-     },300);
+    },300);
   });
   geocoder.on('result', function(event) {
     featureBlankReset(featureBlank);
@@ -672,8 +671,7 @@ $('document').ready(function(){
   };
 
   function createPopUp(item) {
-    var popUps = document.getElementsByClassName('mapboxgl-popup');
-    if (popUps[0]) popUps[0].remove();
+    removePopUps();
     var popup = new mapboxgl.Popup({ closeOnClick: false })
       .setLngLat(item.geometry.coordinates)
       .setHTML('<h5>'+item.properties.city+'</h5>' +
@@ -724,7 +722,7 @@ $('document').ready(function(){
 function createMarkers(){
   places.features.forEach(function(marker){
     var element = document.createElement('div');
-    element.classList = 'marker';
+    element.classList.add('marker');
     new mapboxgl.Marker(element, {
         // offset: [-30, -40]
       })
@@ -738,7 +736,7 @@ function createMarkers(){
       if (activeItem[0]) {
         activeItem[0].classList.remove('active');
       }
-      var location =   document.getElementById('location-' +   places.features.indexOf(marker));
+      var location = document.getElementById('location-' +   places.features.indexOf(marker));
       location.classList.add('active');
     });
   });

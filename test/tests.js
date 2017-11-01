@@ -48,12 +48,19 @@ describe('MapboxGeocoder', function(){
   it('is a constructor function', function(){
     assert(new MapboxGeocoder({
       accessToken: mapboxgl.accessToken
-    })).not.to.Throw('Error')
+    })).to.not.Throw('Error')
   });
 });
 
-describe('getCurrentPosition', function(){
-  it('returns a geoJSON object', function(){
-    expect(typeof navigator.geolocation.getCurrentPosition(function(position){})).to.equal('object')
+// describe('getCurrentPosition', function(){
+//   it('returns a geoJSON object', function(){
+//     expect(typeof navigator.geolocation.getCurrentPosition(function(position){})).to.equal('object')
+//   });
+// });
+
+
+describe('removePopUps', function(){
+  it('is not returning an error', function(){
+    expect(removePopUps).to.not.Throw('Error')
   });
 });
