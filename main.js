@@ -564,6 +564,7 @@ $('document').ready(function(){
   });
 
   $('#menu-locations').click(function(event){
+    removePopUps();
     mapDim();
     menuHide();
     homeHide();
@@ -578,6 +579,7 @@ $('document').ready(function(){
   });
 
   $('#menu-add').click(function(event){
+    removePopUps();
     homeHide();
     formShow();
     menuHide();
@@ -752,4 +754,3 @@ function createMarkers(){
   });
 };
 buildLocationList(places);
-console.log(places);
