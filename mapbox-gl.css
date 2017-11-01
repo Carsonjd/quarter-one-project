@@ -36,23 +36,25 @@
 .mapboxgl-ctrl-bottom-left,
 .mapboxgl-ctrl-bottom-right  { position:absolute; pointer-events:none; z-index:2; }
 .mapboxgl-ctrl-top-left      { top:0; left:0; }
-.mapboxgl-ctrl-top-right     { top:0; right:0; }
+
+.mapboxgl-ctrl-top-right     {
+  top: 20%;
+  right: 5%;
+  width: 85%;
+  z-index: 3;
+}
 .mapboxgl-ctrl-bottom-left   { bottom:0; left:0; }
 .mapboxgl-ctrl-bottom-right  { right:0; bottom:0; }
 
 .mapboxgl-ctrl { clear:both; pointer-events:auto }
 .mapboxgl-ctrl-top-left .mapboxgl-ctrl { margin:10px 0 0 10px; float:left; }
-.mapboxgl-ctrl-top-right .mapboxgl-ctrl{ margin:10px 10px 0 0; float:right; }
+.mapboxgl-ctrl-top-right .mapboxgl-ctrl{ }
 .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl { margin:0 0 10px 10px; float:left; }
 .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin:0 10px 10px 0; float:right; }
 
 .mapboxgl-ctrl-group {
     border-radius: 4px;
-    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
-    -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
-    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.1);
     overflow: hidden;
-    background: #fff;
 }
 .mapboxgl-ctrl-group > button {
   position: absolute;
@@ -65,7 +67,7 @@
     outline: none;
     border: none;
     box-sizing: border-box;
-    background-color: #000000;
+    background-color: transparent;
     cursor: pointer;
 }
 /* https://bugzilla.mozilla.org/show_bug.cgi?id=140562 */
@@ -75,6 +77,8 @@
 }
 .mapboxgl-ctrl > button:last-child {
     border-bottom: 0;
+    top: 35px;
+    right:0;
 }
 .mapboxgl-ctrl > button:hover {
     background-color: rgba(0,0,0,0.05);
