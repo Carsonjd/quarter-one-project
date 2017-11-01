@@ -1,4 +1,6 @@
 $('document').ready(function(){
+  console.log("bananas")
+});
 
   var featureBlank = {
       "type": "Feature",
@@ -410,13 +412,14 @@ $('document').ready(function(){
   container: 'map',
   style: 'mapbox://styles/carsonjd/cj9bo5zhx4i4p2rmk9c5xrsax',
   center: [-105.2838747,40.0165447],
+  pitch: 60,
   zoom: 10
   });
   map.addControl(new mapboxgl.GeolocateControl({
     positionOptions: {
         enableHighAccuracy: true
     },
-    trackUserLocation: true
+    trackUserLocation: false
   }));
 
   var geocoder = new MapboxGeocoder({
@@ -424,7 +427,6 @@ $('document').ready(function(){
   });
 
   map.addControl(geocoder);
-
 
   var menuOpen = false;
   var homeOpen = false;
@@ -583,7 +585,7 @@ $('document').ready(function(){
   });
 
   $('#your-location').click(function(event){
-    featureBlankReset();
+    featureBlankReset(featureBlank);
     $('.mapboxgl-ctrl-icon.mapboxgl-ctrl-geolocate').trigger('click');
     formHide();
     navigator.geolocation.getCurrentPosition(function(position){
@@ -634,7 +636,7 @@ $('document').ready(function(){
      },300);
   });
   geocoder.on('result', function(event) {
-    featureBlankReset();
+    featureBlankReset(featureBlank);
     $('.mapboxgl-ctrl-geocoder').css('display','none');
     var props = featureBlank.properties;
       props.city = event.result.text;
@@ -646,15 +648,15 @@ $('document').ready(function(){
       createMarkers();
       createPopUp(places.features[0]);
       localStorage.setItem('places', JSON.stringify(places));
-      console.log(places);
     });
 
-  function featureBlankReset(){
-    featureBlank.geometry.coordinates = [];
-    var props = featureBlank.properties;
+  function featureBlankReset(obj){
+    obj.geometry.coordinates = [];
+    var props = obj.properties;
     props.address = "";
     props.city = "";
     props.country = "";
+    return obj;
   };
 
   map.on('click', function(event){
@@ -728,7 +730,7 @@ function createMarkers(){
       })
       .setLngLat(marker.geometry.coordinates)
       .addTo(map);
-    element.addEventListener('click',   function(event){
+    element.addEventListener('click', function(event){
       var activeItem = $('active');
       flyToLocation(marker);
       createPopUp(marker);
@@ -741,5 +743,3 @@ function createMarkers(){
     });
   });
 };
-
-});
