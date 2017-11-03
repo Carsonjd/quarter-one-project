@@ -1,9 +1,6 @@
 /*font-family: 'Advent Pro', sans-serif;
 font-family: 'Six Caps', sans-serif;
 font-family: 'Megrim', cursive;*/
-
-/*html, body {margin:0; height: 100%; overflow: hidden;}*/
-
 body {
   background-size: 100%;
   background-repeat: no-repeat;
@@ -132,8 +129,8 @@ h1 {
   right: 1px;
   margin: 20px;
   overflow: scroll;
-  max-height: 500px;
-  z-index: 0;
+  max-height: 450px;
+  z-index: -1;
   font-size: 24px;
 }
 

@@ -29,7 +29,8 @@ $('document').ready(function(){
   style: 'mapbox://styles/carsonjd/cj9bo5zhx4i4p2rmk9c5xrsax',
   center: [-105.2838747,40.0165447],
   pitch: 60,
-  zoom: 10
+  zoom: 10,
+  bearing: -17.6
   });
   map.addControl(new mapboxgl.GeolocateControl({
     positionOptions: {
@@ -93,7 +94,7 @@ $('document').ready(function(){
   };
 
   function homeShow (){
-    $('body').css('background-image','url(DSC00858skiny.jpg)');
+    $('body').css('background-image','url(DSC00858.jpg)');
     $('.about').animate({
       'opacity': '0.6'
     },300).fadeIn(300);
@@ -142,7 +143,7 @@ $('document').ready(function(){
 
   function locationListShow (){
     $('.locations').animate({
-      'top':'2%'
+      'top': '10%'
     },300).fadeIn(100);
   };
 
@@ -230,6 +231,12 @@ $('document').ready(function(){
   });
 
   $('#location-input').on('click','#location-submit',function(){
+    var places =
+      JSON.parse(localStorage.getItem('places')) ||
+      {
+        'type':'FeatureCollection',
+        'features':[]
+      };
     var props = featureBlank.properties;
       props.city = $('#nameinput').val();
       props.address = $('#description-field').val();
@@ -257,6 +264,12 @@ $('document').ready(function(){
 var adding = false;
 
   geocoder.on('result', function(event) {
+    var places =
+      JSON.parse(localStorage.getItem('places')) ||
+      {
+        'type':'FeatureCollection',
+        'features':[]
+      };
     if(adding === true){
     featureBlankReset(featureBlank);
     $('.mapboxgl-ctrl-geocoder').css('display','none');
@@ -283,10 +296,10 @@ var adding = false;
     return obj;
   };
 
-  map.on('click', function(event){
-    JSON.stringify(event.lngLat);
-    var features = map.queryRenderedFeatures(event.point);
-  });
+  // map.on('click', function(event){
+  //   JSON.stringify(event.lngLat);
+  //   var features = map.queryRenderedFeatures(event.point);
+  // });
 
   function flyToLocation(item) {
     map.flyTo({
@@ -302,14 +315,18 @@ var adding = false;
       .setHTML('<h5>'+item.properties.city+'</h5>' +
         '<h4>' + item.properties.address + '</h4>')
       .addTo(map);
-      console.log('we are in createpopup');
   };
 
   function buildLocationList(data){
+    var places =
+      JSON.parse(localStorage.getItem('places')) ||
+      {
+        'type':'FeatureCollection',
+        'features':[]
+      };
     $('#locations').empty();
     for (let i=0; i<data.features.length; i++) {
-      var currentFeature = data.features[i];
-      var prop = currentFeature.properties;
+      var prop = data.features[i].properties;
       var locations = document.getElementById('locations');
       var location = locations.appendChild(document.createElement('div'));
       location.className = 'item';
@@ -343,6 +360,31 @@ var adding = false;
     data: places
   });
   createMarkers();
+  var layers = map.getStyle().layers.reverse();
+    var labelLayerIdx = layers.findIndex(function (layer) {
+        return layer.type !== 'symbol';
+    });
+    var labelLayerId = labelLayerIdx !== -1 ? layers[labelLayerIdx].id : undefined;
+    map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 14,
+        'paint': {
+            'fill-extrusion-color': '#640808',
+            'fill-extrusion-height': {
+                'type': 'identity',
+                'property': 'height'
+            },
+            'fill-extrusion-base': {
+                'type': 'identity',
+                'property': 'min_height'
+            },
+            'fill-extrusion-opacity': .6
+        }
+    }, labelLayerId);
   });
 
 function createMarkers(){
